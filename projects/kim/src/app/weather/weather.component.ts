@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TemperatureUnit } from '../core/enums';
+import { filter, mergeMap } from 'rxjs/operators';
 import { Weather } from '../core/models';
-import { CityService, TemperatureService, WeatherService } from '../core/services';
+import { CityService, WeatherService } from '../core/services';
 
 @Component({
   selector: 'app-weather',
@@ -10,20 +10,20 @@ import { CityService, TemperatureService, WeatherService } from '../core/service
   styleUrls: ['./weather.component.css']
 })
 export class WeatherComponent implements OnInit {
+
   weather$: Observable<Weather>;
-  temperatureUnit: TemperatureUnit;
+
   constructor(
     private weatherService: WeatherService,
-    private temperatureService: TemperatureService,
     private cityService: CityService
   ) { }
 
   ngOnInit(): void {
-    this.weather$ = this.weatherService.weather$;
-    this.temperatureUnit = this.temperatureService.temperatureUnit;
-    this.cityService.city$.subscribe(city => {
-      if (city !== null) { this.weatherService.fetchWeather(city.woeid); }
-    });
+    this.weather$ = this.cityService.city$.pipe(
+      filter(city => city !== null),
+      mergeMap(city => {
+        return this.weatherService.fetchWeather(city.woeid);
+      })
+    );
   }
-
 }

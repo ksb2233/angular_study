@@ -8,11 +8,11 @@ import { TemperatureService } from '../core/services';
   styleUrls: ['./settings.component.css']
 })
 export class SettingsComponent implements OnInit {
-  ischecked: boolean;
+  isFahrenheit: boolean;
   constructor(private temperatureService: TemperatureService) { }
 
   ngOnInit(): void {
-    this.ischecked = this.temperatureService.temperatureUnit === TemperatureUnit.fahrenheit;
+    this.isFahrenheit = this.temperatureService.temperatureUnit === TemperatureUnit.fahrenheit;
   }
 
   clickTemperatureUnitToggle(): void {

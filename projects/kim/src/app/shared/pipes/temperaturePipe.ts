@@ -4,16 +4,14 @@ import { TemperatureService } from '../../core/services/temperature.service';
 
 @Pipe({ name: 'temperature' })
 export class TemperaturePipe implements PipeTransform {
+
     constructor(private temperatureService: TemperatureService) { }
 
-    transform(temperatureValue: number): number {
-        return this.temperatureService.temperatureUnit === TemperatureUnit.fahrenheit ?
-            this.convertFahrenheit(temperatureValue) :
-            this.roundingTemperature(temperatureValue);
-    }
-
-    private convertFahrenheit(temperatureValue: number): number {
-        return this.roundingTemperature(temperatureValue * 9 / 5 + 32);
+    transform(temperatureValue: number): string {
+        if (this.temperatureService.temperatureUnit === TemperatureUnit.fahrenheit) {
+            temperatureValue = temperatureValue * 9 / 5 + 32;
+        }
+        return this.roundingTemperature(temperatureValue) + this.temperatureService.temperatureUnit;
     }
 
     private roundingTemperature(temperatureValue: number): number {

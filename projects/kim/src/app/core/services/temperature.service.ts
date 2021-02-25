@@ -5,7 +5,8 @@ import { TemperatureUnit } from '../enums/temperature.unit';
     providedIn: 'root'
 })
 export class TemperatureService {
-    temperatureUnit = TemperatureUnit.celcius;
+    private DEFUALT_CELCIUS_UNIT = TemperatureUnit.celcius;
+    temperatureUnit = this.DEFUALT_CELCIUS_UNIT;
 
     constructor() { }
 

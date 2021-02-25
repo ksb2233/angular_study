@@ -14,12 +14,13 @@ export class WeatherService {
 
   constructor(private apiService: ApiService) { }
 
-  fetchWeather(locationId: number): void {
-    this.apiService.get('/api/location/', locationId)
-      .subscribe(JsonArray => { this.weatherSubject.next(this.convertWeatherJson(JsonArray)); });
+  fetchWeather(locationId: number): Observable<Weather> {
+    this.apiService.get(`/api/location/${locationId}`)
+      .subscribe(JsonArray => { this.weatherSubject.next(this.convertWeather(JsonArray)); });
+    return this.weather$;
   }
 
-  convertWeatherJson(weatherJsonArray: { [key: string]: any }): Weather {
+  convertWeather(weatherJsonArray: { [key: string]: any }): Weather {
     const weahterJsonArray = weatherJsonArray.consolidated_weather[0];
     return {
       condition: this.mapStringToWeatherCondition(weahterJsonArray.weather_state_abbr),

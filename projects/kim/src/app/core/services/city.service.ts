@@ -15,12 +15,12 @@ export class CityService {
 
   searchCity(cityName: string): void {
     if (cityName) {
-      this.apiService.get('/api/location/search?query=', cityName)
-        .subscribe(JsonArray => this.citySubject.next(this.convertCityJson(JsonArray)));
+      this.apiService.get(`/api/location/search?query=${cityName}`)
+        .subscribe(jsonArray => this.citySubject.next(this.convertCity(jsonArray)));
     }
   }
 
-  convertCityJson(cityJsonArray: { [key: string]: any }): City {
+  convertCity(cityJsonArray: { [key: string]: any }): City {
     const cityArray = cityJsonArray[0];
     return {
       title: cityArray.title,
